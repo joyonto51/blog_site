@@ -1,0 +1,83 @@
+{% load static %}
+
+<header>
+
+    <div class="header-area ">
+        <div id="sticky-header" class="main-header-area">
+            <div class="container-fluid p-0">
+                <div class="row align-items-center no-gutters">
+                    <div class="col-xl-2 col-lg-2">
+                        <div class="logo-img">
+                            <a href="{% url 'home' %}">
+                                <img src="{% static 'img/logo-3.png' %}" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-8 col-lg-8">
+                        <div class="main-menu  d-none d-lg-block text-center">
+                            <nav>
+                                <ul id="navigation">
+                                    <li><a class="active" href="{% url 'home' %}">home</a></li>
+                                    <li><a href="#">services</a></li>
+                                    <li><a href="#">Portfolio</a></li>
+                                    <li><a href="#">pages <i class="ti-angle-down"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="#">Portfolio details</a></li>
+                                            <li><a href="#">about</a></li>
+                                            <li><a href="#">elements</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li><a href="#">blog <i class="ti-angle-down"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="{% url 'blog_list' %}">blog</a></li>
+                                            <li><a href="#">single-blog</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 d-none d-lg-block">
+                        <div class="log_chat_area d-flex align-items-end">
+
+                            {% if request.user.is_authenticated %}
+
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="main-menu  d-none d-lg-block text-center">
+                                        <nav>
+                                            <ul id="navigation">
+                                                <li>
+                                                    <a href="#">
+                                                        hi, {% if request.user.first_name %}
+                                                                {{ request.user.first_name }}
+                                                            {% else %}
+                                                                {{ request.user.username }}
+                                                            {% endif %}
+                                                        <i class="ti-angle-down"></i>
+                                                    </a>
+                                                    <ul class="submenu">
+                                                        <li><a href="single-blog.html">profile</a></li>
+                                                        <li><a href="{% url 'sign_out' %}">Sign Out</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+
+                            {% else %}
+                                <a href="{% url 'sign_in' %}" class="say_hi">Sign In</a>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

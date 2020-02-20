@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Sign Up {% endblock %}
+
+{% block content %}
+
+<div class="get_in_tauch_area" style="background-image: url('{% static 'img/background/bg-5.jpg' %}')">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="section_title text-center mb-10">
+                    <h3 class="wow fadeInUp text-white" data-wow-duration="1s" data-wow-delay=".3s">Sign Up</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="touch_form">
+                    <form name="signUpForm" method="post">
+                        {% csrf_token %}
+                        <div class="row col-12">
+                            <div class="col-3"></div>
+                            <div class="col-6 pull-center">
+                                <div class="col-md-12">
+                                    <div class="single_input wow fadeInUp mb-0" data-wow-duration="1s" data-wow-delay=".4s">
+                                        <input class="mb-0" id="email" name="email" type="text" placeholder="Email" >
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-4">
+                                    <div class="single_input wow fadeInUp mb-0" data-wow-duration="1s" data-wow-delay=".5s">
+                                        <input class="mb-0" name="password" id="password" type="password" placeholder="Password" >
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-4">
+                                    <div class="single_input wow fadeInUp mb-0" data-wow-duration="1s" data-wow-delay=".5s">
+                                        <input class="mb-0" name="re_password" id="re_password" type="password" placeholder="Re-type Password" >
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pull-right mb-3 mt-4">
+                                    <div class="submit_btn wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">
+                                        <button class="boxed-btn3" id="submit" type="submit">Sign Up</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".7s">
+                                    <div class="pull-left ml-3">
+                                    </div>
+                                    <div class="pull-right mr-3" data-wow-duration="1s" data-wow-delay=".7s">
+                                        <a class="text-white text-left" href="{% url 'sign_in' %}">Already have an account?</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{%  block extrajs %}
+{#    <script#}
+{#          src="https://code.jquery.com/jquery-1.12.4.js"#}
+{#          integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="#}
+{#          crossorigin="anonymous">#}
+{#    </script>#}
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js'></script>
+
+    <script>
+
+        // Wait for the DOM to be ready
+        $(function() {
+
+            jQuery.validator.addMethod("checkEmail", function(value, element) {
+                let email = $('#email').val();
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                return regex.test(email);
+            });
+
+            jQuery.validator.addMethod("passwordMatched", function(value, element) {
+                let password = $('#password').val();
+                let re_password = $('#re_password').val();
+
+                return password === re_password;
+            });
+
+            // Initialize form validation on the registration form.
+            // It has the name attribute "registration"
+            $("form[name='signUpForm']").validate({
+                // Specify validation rules
+                rules: {
+                    // The key name on the left side is the name attribute
+                    // of an input field. Validation rules are defined
+                    // on the right side
+                    email:{
+                        required: true,
+                        checkEmail: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    re_password: {
+                        required: true,
+                        passwordMatched: true
+                    }
+                },
+                // Specify validation error messages
+                messages: {
+                    email: {
+                        required: "Please enter an email.",
+                        checkEmail: "The email is not valid."
+                    },
+                    password: {
+                        required: "Please provide a password.",
+                        minlength: "Your password must contain at least 6 characters."
+                    },
+                    re_password: {
+                        required: "Please provide a same password.",
+                        passwordMatched: "Password doesn't match."
+                    },
+                },
+                // Make sure the form is submitted to the destination defined
+                // in the "action" attribute of the form when valid
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}

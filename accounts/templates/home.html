@@ -1,0 +1,33 @@
+{% extends 'base.html' %}"
+{% load static %}
+
+{% block title %}  Home  {% endblock %}
+
+{% block content %}
+
+    <!--     slider area  -->
+    {% include 'slider.html' %}
+
+    <!--    service_area  -->
+    {% include 'service.html' %}
+
+    <!--     about area -->
+    {% include 'about.html' %}
+
+
+    <!-- portfolio_image_area  -->
+    {% include 'portfolio.html' %}
+
+    <!--     work area -->
+    {% include 'work.html' %}
+
+    <!-- team_member_start -->
+    {% include 'team_member.html' %}
+
+    <!-- testimonial_area  -->
+    {% include 'testimonial.html' %}
+
+    <!--     contact area -->
+    {% include 'contact.html' %}
+
+{% endblock %}
