@@ -1,0 +1,20 @@
+{% if messages %}
+    <div id="message_div" class="row justify-content-center">
+        <div class="col-lg-12">
+            <ul class="messages">
+                {% for message in messages %}
+                       <div data-notify="container" class="col-11 col-sm-4 alert alert-{{ message.tags }} alert-with-icon animated fadeInDown"
+                            role="alert" data-notify-position="top-center" data-closing="true">
+                           <button type="button" aria-hidden="true" class="close" data-notify="dismiss">
+                               <i class="nc-icon nc-simple-remove"></i>
+                           </button>
+                           <span data-notify="icon" class="glyphicon glyphicon-star"></span>
+                           <span data-notify="title"></span>
+                           <span data-notify="message">{{ message }}</span>
+                       </div>
+
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

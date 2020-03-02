@@ -72,6 +72,46 @@
 
     <script src="{% static 'js/main.js' %}"></script>
 
+    <script>
+        $(document).ready(function () {
+            setTimeout(function(){$('.animated').addClass('fadeOutUp');}, 7000);
+            $('.close').click(function() {
+                $('.animated').addClass('fadeOutUp');
+                $('div#message_div').attr('disabled', true);
+                document.getElementById("message_div").disabled = true;
+            });
+
+            $('#sign-in').on('click', function (e) {
+                e.preventDefault();
+
+                let current_url = window.location.pathname;
+                let target_url = window.location.origin + '/accounts/sign-in/';
+
+                if (current_url !=='/'){
+                    console.log("with next");
+                    window.location = target_url + '?next=' + current_url
+                }
+                else {
+                    console.log("without next");
+                    window.location = target_url
+                }
+             });
+
+
+            {##}
+            {#$('#sign-out').on('click', function (e) {#}
+            {#    e.preventDefault();#}
+            {##}
+            {#    let current_url = window.location.pathname;#}
+            {#    let target_url = window.location.origin + '/accounts/sign-out/';#}
+            {##}
+            {#    window.location = target_url + '?next=' + current_url#}
+            {##}
+            {# }) #}
+
+
+        });
+    </script>
 
     {% block script %} {% endblock %}
     {% block extrajs %} {% endblock %}

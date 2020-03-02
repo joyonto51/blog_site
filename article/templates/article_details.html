@@ -1,0 +1,481 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="{% static 'css/custom/article_details.css' %}">
+{% endblock %}
+
+{% block content %}
+
+   <!--================Blog Area =================-->
+   <section class="blog_area single-post-area section-padding">
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-8 posts-list">
+               <div class="single-post">
+                  <div class="feature-img">
+                     <img class="img-fluid" src="{{ article.image.url }}"" alt="">
+                  </div>
+                  <div class="blog_details">
+                     <h2>{{ article.title }}</h2>
+                     <ul class="blog-info-link mt-3 mb-4">
+                        <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
+                        <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+                     </ul>
+                     <p class="excert">
+                       {{ article.content|safe }}
+                     </p>
+
+                  </div>
+               </div>
+               <div class="navigation-top">
+                  <div class="d-sm-flex justify-content-between text-center">
+                     <p class="like-info"><span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4
+                        people like this</p>
+                     <div class="col-sm-4 text-center my-2 my-sm-0">
+                        <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
+                     </div>
+                     <ul class="social-icons">
+                        <li><a href="#"><i class="fa fa-facebook-f"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                     </ul>
+                  </div>
+                  <div class="navigation-area">
+                     <div class="row">
+                        <div
+                           class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+                           <div class="thumb">
+                              <a href="#">
+                                 <img class="img-fluid" src="{% static 'img/post/preview.png' %}" alt="">
+                              </a>
+                           </div>
+                           <div class="arrow">
+                              <a href="#">
+                                 <span class="lnr text-white ti-arrow-left"></span>
+                              </a>
+                           </div>
+                           <div class="detials">
+                              <p>Prev Post</p>
+                              <a href="#">
+                                 <h4>Space The Final Frontier</h4>
+                              </a>
+                           </div>
+                        </div>
+                        <div
+                           class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
+                           <div class="detials">
+                              <p>Next Post</p>
+                              <a href="#">
+                                 <h4>Telescopes 101</h4>
+                              </a>
+                           </div>
+                           <div class="arrow">
+                              <a href="#">
+                                 <span class="lnr text-white ti-arrow-right"></span>
+                              </a>
+                           </div>
+                           <div class="thumb">
+                              <a href="#">
+                                 <img class="img-fluid" src="img/post/next.png" alt="">
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="blog-author mb-4">
+                  <div class="media align-items-center">
+                     <img src="img/blog/author.png" alt="">
+                     <div class="media-body">
+                        <a href="#">
+                           <h4>Harvard milan</h4>
+                        </a>
+                        <p>Second divided from form fish beast made. Every of seas all gathered use saying you're, he
+                           our dominion twon Second divided from</p>
+                     </div>
+                  </div>
+               </div >
+                <div>
+                    {% if user.is_authenticated %}
+                        <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" id="article_id" value="{{ article.id }}">
+                        <input type="hidden" id="url" value="{% url 'comment_add' %}">
+
+                        <!-- COMMENT BOX -->
+                        <form class="clearfix" action="" article-id="{{ article.id }}"
+                              method="post" id="comment_form">
+
+                            <label class="text-dark" for="comment_text">
+                                <h4>Comment Box</h4>
+                            </label>
+                            <textarea name="comment_text" id="comment_text" class="form-control" cols="30" rows="3"></textarea>
+                            <button class="btn btn-primary btn-sm pull-right" id="submit_comment">Submit</button>
+                        </form>
+                        <!-- COMMENT BOX -->
+
+                    {% else %}
+
+                        <!-- Sign In  -->
+                        <div class="well" style="margin-top: 20px;">
+                            <h4 class="text-center"><a href="{% url 'sign_in' %}">Sign in</a> to post a comment</h4>
+                        </div>
+                        <!-- Sign In  -->
+
+                    {% endif %}
+
+                    <!-- Display total number of comments on this post  -->
+                    <h4><span id="comments_count">{{ comments.count }}</span> Comment(s)</h4>
+                    <hr>
+                    <!-- comments wrapper -->
+                    <div id="comments-wrapper" class="ml-3">
+                        <!-- Display comments -->
+                        {% for comment in comments %}
+                        <!-- comment -->
+                        <div class="comment clearfix">
+                            <div class="row">
+                                <img src="{{ comment.author.info.image.url }}" alt="" class="profile_pic">
+                                <strong class="mt-1 ml-2">{{ comment.author.full_name }}</strong>
+                                <div class="comment-text ml-5">
+                                    <span class="comment-name">{{ comment.text }}</span>
+                                </div>
+                            </div>
+
+                            <div class="comment-details mb-2">
+                                <span class="comment-date">{{ comment.created_datetime }}</span>
+                                <a class="reply-btn text-info" href="" data-id="{{ comment.id }}">
+                                    {% if comment.replies.all %} Replies {% else %} Reply {% endif %}
+                                </a>
+                                <a comment-type="comment" class="comment-edit-btn edit-btn" data-id="{{ comment.id }}">Edit</a>
+                                <a comment-type="comment" class="comment-delete-btn text-danger" data-id="{{ comment.id }}">Delete</a>
+                            </div>
+                            <!-- GET ALL REPLIES -->
+                            <div class="replies replies_wrapper_{{ comment.id }}">
+                                {% if comment.replies.all %}
+                                    {% for reply in comment.replies.all %}
+
+                                        <div class="comment reply clearfix mt-2">
+                                            <div class="row col-md-8 reply-div">
+                                                <img src="{{ reply.author.info.image.url }}" alt="" class="profile_pic">
+                                                <div class="reply-text mt-1 mt-2">
+                                                    <strong>{{ reply.author.full_name }}</strong>
+                                                    <span class="comment-name reply">{{ reply.text }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="comment-details">
+                                                <span class="comment-date">{{ reply.created_datetime }}</span>
+                                                <a comment-type="reply" class="comment-edit-btn edit-btn" data-id="{{ reply.id }}">Edit</a>
+                                                <a comment-type="reply" class="comment-delete-btn text-danger" data-id="{{ reply.id }}">Delete</a>
+                                            </div>
+                                        </div>
+
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            {% if user.is_authenticated %}
+                                <!-- reply form -->
+                                <form action="" class="reply_form clearfix" id="comment_reply_form_{{ comment.id }}">
+                                    <label for="reply_text"></label>
+                                    <textarea class="form-control" name="reply_text" id="reply_text" cols="30" rows="2"></textarea>
+                                    <button class="btn btn-primary btn-sm pull-right submit-reply" parent-id="{{ comment.id }}">Submit</button>
+                                </form>
+
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div><!-- comments wrapper -->
+                </div><!-- // all comments -->
+
+{#                <!-- comments section -->#}
+{#                <div class="col-md-6 col-md-offset-3 comments-section">#}
+{#                    <!-- comment form -->#}
+{#                    <form class="clearfix" action="index.php" method="post" id="comment_form">#}
+{#                        <h4>Post a comment:</h4>#}
+{#                        <textarea name="comment_text" id="comment_text" class="form-control" cols="30" rows="3"></textarea>#}
+{#                        <button class="btn btn-primary btn-sm pull-right" id="submit_comment">Submit comment</button>#}
+{#                    </form>#}
+{##}
+{#                    <!-- Display total number of comments on this post  -->#}
+{#                    <h2><span id="comments_count">0</span> Comment(s)</h2>#}
+{#                    <hr>#}
+{#                    <!-- comments wrapper -->#}
+{#                    <div id="comments-wrapper">#}
+{#                        <div class="comment clearfix">#}
+{#                                <img src="profile.png" alt="" class="profile_pic">#}
+{#                                <div class="comment-details">#}
+{#                                    <span class="comment-name">Melvine</span>#}
+{#                                    <span class="comment-date">Apr 24, 2018</span>#}
+{#                                    <p>This is the first reply to this post on this website.</p>#}
+{#                                    <a class="reply-btn" href="#" >reply</a>#}
+{#                                </div>#}
+{#                                <div>#}
+{#                                    <!-- reply -->#}
+{#                                    <div class="comment reply clearfix">#}
+{#                                        <img src="profile.png" alt="" class="profile_pic">#}
+{#                                        <div class="comment-details">#}
+{#                                            <span class="comment-name">Awa</span>#}
+{#                                            <span class="comment-date">Apr 24, 2018</span>#}
+{#                                            <p>Hey, why are you the first to comment on this post?</p>#}
+{#                                            <a class="reply-btn" href="#">reply</a>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                    </div>#}
+{#                    <!-- // comments wrapper -->#}
+{#                </div>#}
+                <!-- // comments section -->
+            </div>
+            <div class="col-lg-4">
+               <div class="blog_right_sidebar">
+                  <aside class="single_sidebar_widget search_widget">
+                     <form action="#">
+                        <div class="form-group">
+                           <div class="input-group mb-3">
+                              <input type="text" class="form-control" placeholder='Search Keyword'
+                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+                              <div class="input-group-append">
+                                 <button class="btn" type="button"><i class="ti-search"></i></button>
+                              </div>
+                           </div>
+                        </div>
+                        <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                           type="submit">Search</button>
+                     </form>
+                  </aside>
+                  <aside class="single_sidebar_widget post_category_widget">
+                     <h4 class="widget_title">Category</h4>
+                     <ul class="list cat-list">
+                        <li>
+                           <a href="#" class="d-flex">
+                              <p>Resaurant food</p>
+                              <p>(37)</p>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="d-flex">
+                              <p>Travel news</p>
+                              <p>(10)</p>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="d-flex">
+                              <p>Modern technology</p>
+                              <p>(03)</p>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="d-flex">
+                              <p>Product</p>
+                              <p>(11)</p>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="d-flex">
+                              <p>Inspiration</p>
+                              <p>(21)</p>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="d-flex">
+                              <p>Health Care</p>
+                              <p>(21)</p>
+                           </a>
+                        </li>
+                     </ul>
+                  </aside>
+                  <aside class="single_sidebar_widget popular_post_widget">
+                     <h3 class="widget_title">Recent Post</h3>
+                     <div class="media post_item">
+                        <img src="img/post/post_1.png" alt="post">
+                        <div class="media-body">
+                           <a href="single-blog.html">
+                              <h3>From life was you fish...</h3>
+                           </a>
+                           <p>January 12, 2019</p>
+                        </div>
+                     </div>
+                     <div class="media post_item">
+                        <img src="img/post/post_2.png" alt="post">
+                        <div class="media-body">
+                           <a href="single-blog.html">
+                              <h3>The Amazing Hubble</h3>
+                           </a>
+                           <p>02 Hours ago</p>
+                        </div>
+                     </div>
+                     <div class="media post_item">
+                        <img src="img/post/post_3.png" alt="post">
+                        <div class="media-body">
+                           <a href="single-blog.html">
+                              <h3>Astronomy Or Astrology</h3>
+                           </a>
+                           <p>03 Hours ago</p>
+                        </div>
+                     </div>
+                     <div class="media post_item">
+                        <img src="img/post/post_4.png" alt="post">
+                        <div class="media-body">
+                           <a href="single-blog.html">
+                              <h3>Asteroids telescope</h3>
+                           </a>
+                           <p>01 Hours ago</p>
+                        </div>
+                     </div>
+                  </aside>
+                  <aside class="single_sidebar_widget tag_cloud_widget">
+                     <h4 class="widget_title">Tag Clouds</h4>
+                     <ul class="list">
+                        <li>
+                           <a href="#">project</a>
+                        </li>
+                        <li>
+                           <a href="#">love</a>
+                        </li>
+                        <li>
+                           <a href="#">technology</a>
+                        </li>
+                        <li>
+                           <a href="#">travel</a>
+                        </li>
+                        <li>
+                           <a href="#">restaurant</a>
+                        </li>
+                        <li>
+                           <a href="#">life style</a>
+                        </li>
+                        <li>
+                           <a href="#">design</a>
+                        </li>
+                        <li>
+                           <a href="#">illustration</a>
+                        </li>
+                     </ul>
+                  </aside>
+                  <aside class="single_sidebar_widget instagram_feeds">
+                     <h4 class="widget_title">Instagram Feeds</h4>
+                     <ul class="instagram_row flex-wrap">
+                        <li>
+                           <a href="#">
+                              <img class="img-fluid" src="img/post/post_5.png" alt="">
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#">
+                              <img class="img-fluid" src="img/post/post_6.png" alt="">
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#">
+                              <img class="img-fluid" src="img/post/post_7.png" alt="">
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#">
+                              <img class="img-fluid" src="img/post/post_8.png" alt="">
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#">
+                              <img class="img-fluid" src="img/post/post_9.png" alt="">
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#">
+                              <img class="img-fluid" src="img/post/post_10.png" alt="">
+                           </a>
+                        </li>
+                     </ul>
+                  </aside>
+                  <aside class="single_sidebar_widget newsletter_widget">
+                     <h4 class="widget_title">Newsletter</h4>
+                     <form action="#">
+                        <div class="form-group">
+                           <input type="email" class="form-control" onfocus="this.placeholder = ''"
+                              onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+                        </div>
+                        <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                           type="submit">Subscribe</button>
+                     </form>
+                  </aside>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <!--================ Blog Area end =================-->
+
+
+    <!--          Delete Modal Template               -->
+
+    <div class="modal fade" role="dialog" id="comment-delete-modal">
+        <div class="modal-dialog">
+            <div class="modal-content modal-backdrop">
+                <div class="modal-header">
+                    <h6 class="modal-title">Delete</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" id="delete-comment-id" value="">
+                        <div class="col-md-12">
+                            <span class="text-center">Are you sure you want ot delete this comment?</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-secondary bg-light" data-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete" id="comment-delete" class="btn-sm btn btn-info">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--          Edit Modal Template               -->
+
+    <div class="modal fade" role="dialog" id="comment-edit-modal">
+        <div class="modal-dialog">
+
+            <div class="modal-content modal-backdrop">
+                <div class="modal-header">
+                    <h6 class="modal-title">Edit</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" id="edit-comment-id" value="">
+                            <label class="text-dark" for="comment-edit-text">Comment</label>
+                            <textarea cols="20" rows="2" id="comment-edit-text" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-secondary bg-light" data-dismiss="modal">Cancel</button>
+                    <button id="comment-edit" class="btn-sm btn btn-info">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{%  endblock %}
+
+    <!-- Javascripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Bootstrap Javascript -->
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+
+
+{% block extrajs %}
+    <script src="{% static 'js/custom/articles.js' %}"></script>
+{% endblock %}

@@ -1,5 +1,7 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.forms import models
+
+from accounts.models import User, UserInfo
 from django.core.exceptions import ValidationError
 
 
@@ -30,3 +32,16 @@ class SignUpForm(forms.Form):
             self.cleaned_data['username'] = email
 
         return self.cleaned_data
+
+
+class UserForm(models.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+class UserInfoForm(models.ModelForm):
+    image = forms.ImageField()
+
+    class Meta:
+        model = UserInfo
+        fields = ['image', 'phone', 'profession', 'address']

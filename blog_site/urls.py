@@ -24,7 +24,9 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('blog/', include('blog.urls')),
+    path('article/', include('article.urls')),
+    path('summernote/', include('django_summernote.urls')),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

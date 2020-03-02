@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Profile {% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{#    <div class="bradcam_area breadcam_bg_2"></div>#}
+    <div class="get_in_tauch_area bg-image-1">
+        <div class="container bootstrap snippet">
+            {% include 'django_message.html' %}
+
+            <div class="row">
+                <div class="col-sm-10 text-center">
+                    <h1 class="text-white">
+                        {% if user.full_name %}
+                            {{ user.full_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </h1>
+                </div>
+                <div class="col-sm-2">
+                    <a href="#" class="pull-right text-danger"><i class="fa fa-edit"> Edit Info</i></a>
+                </div>
+            </div>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="ml-4 align-content-center">
+                            <div class="circle mb-5">
+                                <img class="profile-img" src="{{ user.info.image.url }}" alt="avatar">
+                            </div>
+                            <div class="p-image">
+                                <i class="fa fa-edit upload-button"></i>
+                                <input name="image" class="form-control file-upload" type="file" accept="image/*"/>
+                            </div>
+                        </div>
+
+
+                        <ul class="list-group transparent">
+                            <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> 78</li>
+                        </ul>
+
+                        <div class="panel panel-default mt-5 mb-4">
+                            <div class="panel-heading">Social Media</div>
+                            <div class="panel-body">
+                                <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
+                            </div>
+                        </div>
+                    </div><!--/col-3-->
+
+                    <div class="col-sm-9">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                <hr>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="first_name"><h4>First Name</h4></label>
+                                            <input type="text" class="form-control" name="first_name" id="first_name" value="{{ user.first_name|default_if_none:'' }}" placeholder="first name" title="enter your first name if any.">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="first_name"><h4>Last Name</h4></label>
+                                            <input type="text" class="form-control" name="last_name" id="last_name" value="{{ user.last_name|default_if_none:''}}" placeholder="last name" title="enter your first name if any.">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="phone"><h4>Phone</h4></label>
+                                            <input type="text" class="form-control" name="phone" value="{{ user.info.phone|default_if_none:'' }}" id="phone" placeholder="enter phone" title="enter your phone number if any.">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="email"><h4>Email</h4></label>
+                                            <input readonly type="email" class="form-control" name="email" value="{{ user.email }}" id="email" placeholder="you@email.com" title="enter your email.">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="email"><h4>Profession</h4></label>
+                                            <input type="text" name="profession" value="{{ user.info.profession|default:'' }}" class="form-control" id="address" placeholder="e.g. Teacher" title="enter a address">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="email"><h4>Address</h4></label>
+                                            <input type="text" name="address" value="{{ user.info.address|default:'' }}" class="form-control" id="address" placeholder="somewhere" title="enter a address">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <br>
+                                            <button class="btn btn-lg btn-info pull-right " type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Update</button>
+                                            <button class="btn btn-lg transparent" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>-->
+                                        </div>
+                                    </div>
+                                <hr>
+                            </div><!--/tab-pane-->
+                        </div>
+                    </div>
+                </div><!--/col-9-->
+            </form>
+        </div><!--/row-->
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+        {#$(document).ready(function() {#}
+        {##}
+        {#    var readURL = function(input) {#}
+        {#        if (input.files && input.files[0]) {#}
+        {#            var reader = new FileReader();#}
+        {##}
+        {#            reader.onload = function (e) {#}
+        {#                $('.avatar').attr('src', e.target.result);#}
+        {#            };#}
+        {##}
+        {#            reader.readAsDataURL(input.files[0]);#}
+        {#        }#}
+        {#    };#}
+        {##}
+        {##}
+        {#    $(".file-upload").on('change', function(){#}
+        {#        readURL(this);#}
+        {#    });#}
+
+
+        $(document).ready(function() {
+
+
+            var readURL = function(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('.profile-img').attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            };
+
+
+            $(".file-upload").on('change', function(){
+                readURL(this);
+            });
+
+            $(".upload-button").on('click', function() {
+               $(".file-upload").click();
+            });
+        });
+    </script>
+{% endblock %}

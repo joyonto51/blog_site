@@ -6,31 +6,10 @@
 {% block content %}
 
 <div class="get_in_tauch_area" style="background-image: url('{% static 'img/background/bg-5.jpg' %}')">
-
     <div class="container">
 
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                {% if messages %}
-                    <div class="col-md-2"></div>
-                    <ul class="col-md-8 messages">
-                        {% for message in messages %}
-                               <div data-notify="container" class="col-11 col-sm-4 alert alert-{{ message.tags }} alert-with-icon animated fadeInDown"
-                                    role="alert" data-notify-position="top-center" data-closing="true">
-                                   <button type="button" aria-hidden="true" class="close" data-notify="dismiss">
-                                       <i class="nc-icon nc-simple-remove"></i>
-                                   </button>
-                                   <span data-notify="icon" class="glyphicon glyphicon-star"></span>
-                                   <span data-notify="title"></span>
-                                   <span data-notify="message">{{ message }}</span>
-                               </div>
-
-                        {% endfor %}
-                    </ul>
-                    <div class="col-md-2"></div>
-                {% endif %}
-            </div>
-        </div>
+        {# icluded django message template for messages #}
+        {% include 'django_message.html' %}
 
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -84,12 +63,5 @@
 {% endblock %}
 
 {% block extrajs %}
-<script>
-    $(document).ready(function () {
-        setTimeout(function(){$('.animated').addClass('fadeOutUp');}, 7000);
-        $('.close').click(function() {
-            $('.animated').addClass('fadeOutUp');
-        })
-    });
-</script>
+
 {% endblock %}

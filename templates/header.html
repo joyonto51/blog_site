@@ -1,7 +1,6 @@
 {% load static %}
 
 <header>
-
     <div class="header-area ">
         <div id="sticky-header" class="main-header-area">
             <div class="container-fluid p-0">
@@ -17,24 +16,16 @@
                         <div class="main-menu  d-none d-lg-block text-center">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="active" href="{% url 'home' %}">home</a></li>
-                                    <li><a href="#">services</a></li>
-                                    <li><a href="#">Portfolio</a></li>
-                                    <li><a href="#">pages <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="#">Portfolio details</a></li>
-                                            <li><a href="#">about</a></li>
-                                            <li><a href="#">elements</a></li>
-                                        </ul>
-                                    </li>
+                                    <li><a class="active link-text" href="{% url 'home' %}">home</a></li>
+                                    <li><a class="link-text" href="#">services</a></li>
 
-                                    <li><a href="#">blog <i class="ti-angle-down"></i></a>
+                                    <li><a class="link-text" href="{% url 'articles' %}">articles<i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="{% url 'blog_list' %}">blog</a></li>
-                                            <li><a href="#">single-blog</a></li>
+                                            <li><a class="link-text" href="{% url 'articles' %}">articles</a></li>
+                                            <li><a class="link-text" href="{% url 'article_add' %}">Add Articles</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Contact</a></li>
+                                    <li><a class="link-text" href="#">Contact</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -49,7 +40,7 @@
                                         <nav>
                                             <ul id="navigation">
                                                 <li>
-                                                    <a href="#">
+                                                    <a class="link-text" href="#">
                                                         hi, {% if request.user.first_name %}
                                                                 {{ request.user.first_name }}
                                                             {% else %}
@@ -58,8 +49,9 @@
                                                         <i class="ti-angle-down"></i>
                                                     </a>
                                                     <ul class="submenu">
-                                                        <li><a href="single-blog.html">profile</a></li>
-                                                        <li><a href="{% url 'sign_out' %}">Sign Out</a></li>
+                                                        <li><a class="link-text" href="{% url 'profile' %}">profile</a></li>
+                                                        <li><a class="link-text" id="sign-out"
+                                                               href="{% url 'sign_out' %}?next={{ request.path | urlencode }}">Sign Out</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -68,7 +60,7 @@
                                 </div>
 
                             {% else %}
-                                <a href="{% url 'sign_in' %}" class="say_hi">Sign In</a>
+                                <a href="" class="say_hi link-text" id="sign-in">Sign In</a>
                             {% endif %}
 
                         </div>

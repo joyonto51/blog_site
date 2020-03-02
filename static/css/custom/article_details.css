@@ -1,0 +1,66 @@
+form button { margin: 5px 0; }
+textarea { display: block; margin-bottom: 10px; }
+/*post*/
+.post { border: 1px solid #ccc; margin-top: 10px; }
+/*comments*/
+.comments-section { margin-top: 10px; border: 1px solid #ccc; }
+.comment { margin-bottom: 10px; }
+.comment .comment-name {
+    font-size: 14px;
+}
+.comment .comment-date {
+    color: #5c5c5b;
+    font-style: italic;
+    font-size: 0.8em;
+    margin-left: 2.5em;
+}
+.comment .reply-btn, .comment-edit-btn {
+    font-size: 0.8em;
+    color: #007bff;
+    margin-left: 10px;
+    margin-top: 0;
+}
+.comment .comment-delete-btn{
+     font-size: 0.8em;
+    color: #007bff;
+    margin-left: 10px;
+    margin-top: 0;
+}
+
+.comment-details {
+    width: 91.5%;
+    float: left;
+    margin-top: 0;
+}
+.comment-text{
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+.comment-details p {
+    margin-bottom: 0;
+    color: #424241;
+}
+.comment .profile_pic {
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
+    float: left;
+    border-radius: 50%;
+}
+/*replies*/
+.reply { margin-left: 30px; }
+.reply_form {
+    margin-left: 40px;
+    display: none;
+}
+.replies{
+    display: none;
+}
+#comment_form { margin-top: 10px; }
+
+.modal-content{
+    overflow: initial;
+    background-color: white;
+    position: relative;
+}
+        /*{#.modal-backdrop {z-index: 1050 !important;}#}*/
