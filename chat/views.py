@@ -5,7 +5,7 @@ from blog_site.views import BaseView
 
 
 class MessengerView(BaseView):
-    template_name = 'messenger.html'
+    template_name = 'messenger2.html'
 
     def get(self, request, *args, **kwargs):
 
