@@ -45,11 +45,13 @@ DEFAULT_APPS = [
 MY_APPS = [
     'accounts',
     'article',
+    'chat',
 ]
 
 THIRD_PARTY_APPS = [
     'django_summernote',
     'rest_framework',
+    'channels'
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + MY_APPS + THIRD_PARTY_APPS
@@ -90,11 +92,20 @@ REST_FRAMEWORK = {
     )
 }
 
-SUMMERNOTE_THEME = 'bs4'
-X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 WSGI_APPLICATION = 'blog_site.wsgi.application'
 
+# For Django Channel
+ASGI_APPLICATION = "blog_site.routing.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -157,11 +168,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # for customizing message tags
 from django.contrib.messages import constants as messages
 
+# To Change the Message Background Colour
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success',
     messages.ERROR: 'danger',
     messages.WARNING: 'warning',
 }
+
+
+''' Summer-Note Configuration '''
+
+SUMMERNOTE_THEME = 'bs4'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 SUMMERNOTE_CONFIG = {
     # Using Summernote Widget - iframe mode, default
