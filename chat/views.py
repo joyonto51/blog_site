@@ -12,4 +12,4 @@ class MessengerView(BaseView):
         context = {
             'users': User.objects.all().exclude(id=request.user.id)
         }
-        return render(request, 'messenger.html', context)
+        return render(request, self.template_name, context)

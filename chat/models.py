@@ -1,5 +1,3 @@
-import uuid
-
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -14,13 +12,24 @@ def validate_message_content(content):
             params={'content': content},
         )
 
+
+class Conversation(models.Model):
+    key = models.CharField(unique=True, max_length=100)
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.key
+
+
 class MessageManager(models.Manager):
 
     def last_50_messages(self):
         return self.get_queryset().order_by('-created_at')[:50]
 
+
 class Message(models.Model):
-    # id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4, editable=False)
+    conversation = models.ForeignKey(Conversation, models.CASCADE, related_name='messages')
+
     sender = models.ForeignKey(User, blank=False, null=False, related_name='sent_messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, blank=False, null=False, related_name='received_messages', on_delete=models.CASCADE)
 

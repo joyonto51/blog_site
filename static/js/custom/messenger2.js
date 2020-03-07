@@ -52,26 +52,27 @@ $(document).ready(function() {
     // this "on message" method will receive tha all messages
     chatSocket.onmessage = function (e) {
         var data = JSON.parse(e.data);
+        var message = data['message'];
 
-        if (data.sender.id === selfId || data.receiver.id === selfId) {
+        if (message.sender.id === selfId || message.receiver.id === selfId) {
 
-            appendToMessenger(data);
+            appendToMessenger(message);
             localStorage.setItem('messenger', JSON.stringify(messenger))
         }
     };
 
 
-    function appendToMessenger(data){
-        let senderId = data.sender.id;
-        let receiverId = data.receiver.id;
+    function appendToMessenger(message){
+        let senderId = message.sender.id;
+        let receiverId = message.receiver.id;
 
         if (receiverId === selfId){
-            messenger[senderId].push(data)
+            messenger[senderId].push(message)
         }
-        else messenger[receiverId].push(data);
+        else messenger[receiverId].push(message);
 
         if (selectedUserId === receiverId || selectedUserId === senderId){
-            chatBody.append(getMessageDiv(data))
+            chatBody.append(getMessageDiv(message))
         }
     }
 
@@ -91,12 +92,16 @@ $(document).ready(function() {
 
     $('#chat-message-submit').on('click', function () {
         let chatInput = $('#chat-textarea');
-        let message = chatInput.val();
+        let content = chatInput.val();
 
         chatSocket.send(JSON.stringify({
-            'sender': selfData,
-            'receiver': receiverData,
-            'message': message
+            'command': 'new_message',
+            'conversation_key': getConversationKey(selfId, selectedUserId),
+            'message': {
+                'sender': selfData,
+                'receiver': receiverData,
+                'content': content
+            }
         }));
 
         // chatBody.append(getMessageDiv(message))
@@ -114,17 +119,17 @@ $(document).ready(function() {
     }
 
 
-    function getMessageDiv(data) {
-        let sender = data['sender'];
-        let receiver = data['receiver'];
-        let message = data['message'];
+    function getMessageDiv(message) {
+        let sender = message['sender'];
+        let receiver = message['receiver'];
+        let content = message['content'];
 
         scrollToBottom();
 
         if(sender['id'] === selfId){
             return `<div class="d-flex justify-content-end mb-4">
                         <div class="msg_cotainer_send">
-                            ${message}
+                            ${content}
                             <div class="row">
                                 <span class="msg_time_send">Today</span>
 
@@ -141,7 +146,7 @@ $(document).ready(function() {
                             <img src="${sender['image']}" class="rounded-circle user_img_msg">
                         </div>
                         <div class="msg_cotainer">
-                            ${message}
+                            ${content}
                             <div class="row">
                                 <span class="msg_time_send">Today</span>
 
@@ -149,6 +154,14 @@ $(document).ready(function() {
                         </div>
                     </div>`
         }
+    }
+
+    function getConversationKey(sender_id, receiver_id) {
+        if(sender_id < receiver_id){
+            return `${sender_id}_${receiver_id}`
+        }
+
+        return `${receiver_id}_${sender_id}`
     }
 
     function scrollToBottom() {

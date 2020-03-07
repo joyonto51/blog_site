@@ -14,17 +14,17 @@ import chat.routing
 #         ),
 # })
 
-from chat.consumer2 import CommentConsumer, ChatConsumer
-
+# from chat.consumer2 import CommentConsumer, ChatConsumer
+from chat.consumer3 import ChatConsumer
 
 application = ProtocolTypeRouter({
 
     # WebSocket chat handler
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            url(r"^message/(?P<sender_id>[0-9])/(?P<receiver_id>[0-9])/$", ChatConsumer),
             url(r"^messenger/$", ChatConsumer),
-            url(r"^comment/$", CommentConsumer),
+            # url(r"^messenger/$", ChatConsumer),
+            # url(r"^comment/$", CommentConsumer),
         ])
     ),
 
