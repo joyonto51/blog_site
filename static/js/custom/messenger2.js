@@ -73,7 +73,7 @@ $(document).ready(function() {
         if (message.sender.id === selfId || message.receiver.id === selfId) {
 
             appendToMessenger(message);
-            localStorage.setItem('messenger', JSON.stringify(messenger))
+            // localStorage.setItem('messenger', JSON.stringify(messenger))
         }
     }
 
@@ -114,7 +114,7 @@ $(document).ready(function() {
         }
     });
 
-
+    // when the submitted the message
     $('#chat-message-submit').on('click', function () {
         let chatInput = $('#chat-textarea');
         let content = chatInput.val();
@@ -143,7 +143,7 @@ $(document).ready(function() {
         });
     }
 
-
+    // get message with html code
     function getMessageDiv(message) {
         let sender = message['sender'];
         let receiver = message['receiver'];
@@ -152,6 +152,7 @@ $(document).ready(function() {
         scrollToBottom();
 
         if(sender['id'] === selfId){
+            // if the sender is self, it will set the message on right side
             return `<div class="d-flex justify-content-end mb-4">
                         <div class="msg_cotainer_send">
                             ${content}
@@ -166,6 +167,7 @@ $(document).ready(function() {
                     </div>`
         }
         else {
+            // otherwise it will set the message on left side
             return `<div class="d-flex justify-content-start mb-4">
                         <div class="img_cont_msg">
                             <img src="${sender['image']}" class="rounded-circle user_img_msg">
@@ -181,6 +183,7 @@ $(document).ready(function() {
         }
     }
 
+    // get conversation key by sender and receiver's id
     function getConversationKey(sender_id, receiver_id) {
         if(sender_id < receiver_id){
             return `${sender_id}_${receiver_id}`
@@ -189,6 +192,7 @@ $(document).ready(function() {
         return `${receiver_id}_${sender_id}`
     }
 
+    // this function will scroll to bottom
     function scrollToBottom() {
         chatBody.animate({ scrollTop: chatBody.prop('scrollHeight')}, 10)
     }
