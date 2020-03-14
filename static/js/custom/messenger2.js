@@ -4,13 +4,12 @@ $(document).ready(function() {
     });
 
     var messenger = {};
-    console.log(JSON.parse(localStorage.getItem('messenger')));
-
-    if(localStorage.getItem('messenger') !== null){
-        messenger = JSON.parse(localStorage.getItem('messenger'));
-        addMessageToCurrentSelectedPerson()
-    }
-
+    // console.log(JSON.parse(localStorage.getItem('messenger')));
+    //
+    // if(localStorage.getItem('messenger') !== null){
+    //     messenger = JSON.parse(localStorage.getItem('messenger'));
+    //     addMessageToCurrentSelectedPerson()
+    // }
 
     // appending all user to messenger array
     $('.user').each(function () {
@@ -45,13 +44,30 @@ $(document).ready(function() {
         $('#chat-with-image').attr('src',selectedImageURL);
 
         chatBody.empty();
-        addMessageToCurrentSelectedPerson();
+        // addMessageToCurrentSelectedPerson();
+
+        chatSocket.send(JSON.stringify({
+            'command': 'fetch_messages',
+            'conversation_key': getConversationKey(selfId, selectedUserId),
+        }));
     });
 
 
     // this "on message" method will receive tha all messages
     chatSocket.onmessage = function (e) {
         var data = JSON.parse(e.data);
+        console.log(data);
+
+        if(data.command === 'new_message'){
+            newMessage(data)
+        }
+        else if (data.command === 'fetch_messages'){
+            fetchMessage(data)
+        }
+    };
+
+    // If new message sent it will add the message to chat-bot
+    function newMessage(data){
         var message = data['message'];
 
         if (message.sender.id === selfId || message.receiver.id === selfId) {
@@ -59,7 +75,16 @@ $(document).ready(function() {
             appendToMessenger(message);
             localStorage.setItem('messenger', JSON.stringify(messenger))
         }
-    };
+    }
+
+    // if previous messages sent it will add the messages to chat-bot
+    function fetchMessage(data) {
+        let messages = data['messages'];
+
+        messages.forEach(function (message) {
+            chatBody.append(getMessageDiv(message))
+        });
+    }
 
 
     function appendToMessenger(message){

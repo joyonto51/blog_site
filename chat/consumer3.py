@@ -7,6 +7,17 @@ from .models import Message, Conversation
 
 class ChatConsumer(WebsocketConsumer):
 
+    def fetch_messages(self, data):
+        conversation_key = data['conversation_key']
+        messages = Message.objects.filter(conversation__key=conversation_key)[:50]
+
+        content = {
+            'command': 'fetch_messages',
+            'conversation_key': conversation_key,
+            'messages': self.messages_to_json(messages)
+        }
+        self.send_message(content)
+
     def new_message(self, data):
         message = data.get('message', None)
         key = data.get('conversation_key', None)
@@ -18,8 +29,10 @@ class ChatConsumer(WebsocketConsumer):
         receiver = User.objects.get(id=receiver['id'])
 
         conversation, created = Conversation.objects.get_or_create(key=key)
-        Message.objects.create(conversation=conversation, sender=sender,
+        _message_ = Message.objects.create(conversation=conversation, sender=sender,
                                          receiver=receiver, content=message['content'])
+
+        message['created_at'] = str(_message_.created_at)
 
         content = {
             'command': 'new_message',
@@ -29,10 +42,9 @@ class ChatConsumer(WebsocketConsumer):
         self.send_chat_message(content)
 
 
-
     commands = {
         # 'init_chat': init_chat,
-        # 'fetch_messages': fetch_messages,
+        'fetch_messages': fetch_messages,
         'new_message': new_message,
     }
 
@@ -93,10 +105,19 @@ class ChatConsumer(WebsocketConsumer):
         return result
 
     def message_to_json(self, message):
+
         return {
-            'sender': message.sender.username,
+            'sender': self.get_user_short_info(message.sender),
+            'receiver': self.get_user_short_info(message.receiver),
             'content': message.content,
             'created_at': str(message.created_at)
+        }
+
+    def get_user_short_info(self, user):
+        return {
+            'id': user.id,
+            'name': user.full_name,
+            'image':user.info.image.url,
         }
 
 
@@ -123,11 +144,4 @@ class ChatConsumer(WebsocketConsumer):
     #     content['success'] = 'Chatting in with success with username: ' + username
     #     self.send_message(content)
     #
-    # def fetch_messages(self, data):
-    #     messages = Message.objects.last_50_messages()
-    #
-    #     content = {
-    #         'command': 'messages',
-    #         'messages': self.messages_to_json(messages)
-    #     }
-    #     self.send_message(content)
+
