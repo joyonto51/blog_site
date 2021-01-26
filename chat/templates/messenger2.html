@@ -120,6 +120,8 @@
 
         var chatBody = $('#chat-body');
 
+        var chatSocket = new WebSocket('ws://' + window.location.host + '/messenger/');
+
         var selfData = {
             'id': selfId,
             'name': selfName,

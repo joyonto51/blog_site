@@ -23,10 +23,9 @@ $(document).ready(function() {
         // else messenger[id] = []
     });
 
-    console.log(messenger);
 
-    var chatSocket = new WebSocket('ws://' + window.location.host + '/messenger/');
-    // console.log(chatSocket);
+    fetchMessagesOfCurrentSelectedPerson();
+
 
     $('.chat-select').on('click', function () {
 
@@ -43,13 +42,8 @@ $(document).ready(function() {
         $('#chat-with-name').text(selectedUserName);
         $('#chat-with-image').attr('src',selectedImageURL);
 
-        chatBody.empty();
-        // addMessageToCurrentSelectedPerson();
-
-        chatSocket.send(JSON.stringify({
-            'command': 'fetch_messages',
-            'conversation_key': getConversationKey(selfId, selectedUserId),
-        }));
+        // to fetch the messages from server
+        fetchMessagesOfCurrentSelectedPerson()
     });
 
 
@@ -135,12 +129,14 @@ $(document).ready(function() {
 
 
 
-    function addMessageToCurrentSelectedPerson() {
-        let messages = messenger[selectedUserId];
+    function fetchMessagesOfCurrentSelectedPerson() {
+        chatBody.empty();
+        // addMessageToCurrentSelectedPerson();
 
-        messages.forEach(function (message) {
-            chatBody.append(getMessageDiv(message))
-        });
+        chatSocket.send(JSON.stringify({
+            'command': 'fetch_messages',
+            'conversation_key': getConversationKey(selfId, selectedUserId),
+        }));
     }
 
     // get message with html code
@@ -198,5 +194,4 @@ $(document).ready(function() {
     }
 
     scrollToBottom();
-
 });
