@@ -18,6 +18,7 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
+
 class Article(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')
